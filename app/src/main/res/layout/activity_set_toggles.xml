@@ -1,3 +1,9 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+
+    >
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
     android:layout_height="wrap_content" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -85,35 +91,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Shut Down"
-            android:id="@+id/textView14"
-            android:layout_row="4"
-            android:layout_column="0"
-            android:textSize="25dp"
-            android:paddingLeft="10dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/textView15"
-            android:layout_row="5"
-            android:layout_column="0"
-            android:textSize="25dp" />
-
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New ToggleButton"
-            android:id="@+id/shutdown_button"
-            android:layout_row="4"
-            android:layout_column="3"
-            android:onClick="shutdown_settings" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Mobile Data"
             android:id="@+id/textView16"
             android:layout_row="6"
@@ -159,7 +136,9 @@
             android:id="@+id/profile_button"
             android:layout_row="8"
             android:layout_column="3"
-            android:onClick="silent_settings" />
+            android:onClick="silent_settings"
+            android:width="100dp"
+            android:textAlignment="center" />
 
         <Button
             android:layout_width="wrap_content"
@@ -173,3 +152,4 @@
 
     </GridLayout>
 </RelativeLayout>
+</ScrollView>

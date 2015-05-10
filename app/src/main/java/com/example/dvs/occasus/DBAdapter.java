@@ -15,12 +15,11 @@ import android.util.Log;
 
 public class DBAdapter{
 
-    //private static String DB_PATH = "";
 
     public static final String DATABASE_NAME = "Events";
     public static final String DATABASE_TABLE = "event_list";
     public static final int DATABASE_VERSION = 1;
-    public static final String value= "event_name";
+    public static final String value= "event_start_date_time";
     private DbHelper Helper;
     private static Context Context;
     private static SQLiteDatabase db;
@@ -28,13 +27,12 @@ public class DBAdapter{
 
     static final String DATABASE_CREATE =
             "create table event_list (_id integer primary key autoincrement, event_name text not null,description text, " +
-                    "event_date text not null, start_time text not null, end_time text not null," +
+                    "event_date text not null, event_start_date_time text not null,start_time text not null, end_time text not null,next_day integer not null," +
                     "bluetooth text not null,wifi text not null,profile text not null, mobile_data text not null,monday integer not null," +
-                    "tuesday integer not null,wednesday integer not null,thursday integer not null,friday not null,saturday not null," +
-                    "sunday not null);";
+                    "tuesday integer not null,wednesday integer not null,thursday integer not null,friday integer not null,saturday integer not null," +
+                    "sunday integer not null);";
 
 
-    //bluetooth  wifi  profile  mobile_data
 
     public DBAdapter(Context ctx) {
         Context = ctx;
@@ -45,7 +43,6 @@ public class DBAdapter{
 
         public DbHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
-            // DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
             // TODO Auto-generated constructor stub
         }
 
@@ -54,7 +51,6 @@ public class DBAdapter{
             try {
                 db.execSQL(DATABASE_CREATE);
             } catch (SQLException e) {
-                //e.printStackTrace();
                 throw e;
             }
         }
@@ -83,18 +79,19 @@ public class DBAdapter{
         Helper.close();
     }
 
-    public long insertevent(String name,String desc, String date, String stime, String etime, String bluetooth2,
+    public long insertevent(String name,String desc, String date, String event_start_date_time,String stime, String etime, Integer next,String bluetooth2,
                             String wifi2, String profile,String mobile_data,Integer mon,Integer tue,Integer wed,Integer thu,
                             Integer fri,Integer sat,Integer sun)
     {
 
         ContentValues initialValues = new ContentValues();
         initialValues.put("event_name", name);
-
         initialValues.put("description",desc);
         initialValues.put("event_date", date);
+        initialValues.put("event_start_date_time",event_start_date_time);
         initialValues.put("start_time",stime);
         initialValues.put("end_time",etime);
+        initialValues.put("next_day",next);
         initialValues.put("bluetooth",bluetooth2);
         initialValues.put("wifi",wifi2);
         initialValues.put("profile",profile);
@@ -107,42 +104,39 @@ public class DBAdapter{
         initialValues.put("saturday",sat);
         initialValues.put("sunday",sun);
 
-
-
         return db.insert(DATABASE_TABLE, null, initialValues);
     }
 
-    //---deletes a particular event---
-    public void deleteEvent(String name1)
-    {
-        // String where = "value= 'name1'";
-       // String[] whereArgs= null;
-        open();
-        db.delete(DATABASE_TABLE,value + "= ?", new String[]{name1});
-        close();
 
-       // return db.delete(DATABASE_TABLE, "event_name" + "=" + name1, null) > 0;
+
+    //---deletes a particular event---
+    public void deleteEvent(String date_time)
+    {
+        open();
+        db.delete(DATABASE_TABLE,value + "= ?", new String[]{date_time});
+        close();
     }
 
 
     //---retrieves all the contacts---
     public Cursor getAllEventsDetails()
     {
-
         return db.rawQuery("SELECT * from event_list",null);
     }
-    public Cursor getEventsDetail(String req_name)
+
+
+    // retrieves contacts having name=req_name
+    public Cursor getEventDetail(String date_time)
     {
-
-        String edit= "select * from event_list where event_name =?";
-
-
-        return db.rawQuery(edit,new String[]{req_name});
-
-
-
+        String edit= "select * from event_list where event_start_date_time =?";
+        return db.rawQuery(edit,new String[]{date_time});
     }
 
-
+    //retrieves contacts having _id=id
+   /* public Cursor getEventsDetail1(int id)
+    {
+        String edit= "select * from event_list where _id =?";
+        return db.rawQuery(edit,new String[] {Integer.toString(id)});
+    }*/
 
 }

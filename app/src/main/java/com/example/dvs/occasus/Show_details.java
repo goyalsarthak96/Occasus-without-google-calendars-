@@ -2,26 +2,36 @@ package com.example.dvs.occasus;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class Show_details extends ActionBarActivity {
 
-    String name1;
+    String clicked_date_time;
+    String st;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_details);
-        name1=getIntent().getStringExtra("name");
+
+
+        //to add logo to action bar
+        ActionBar ac=getSupportActionBar();
+        ac.setDisplayShowHomeEnabled(true);
+        ac.setLogo(R.drawable.occasus1);
+        ac.setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        clicked_date_time=getIntent().getStringExtra("clicked_date_time");
         DBAdapter db = new DBAdapter(this);
         db.open();
-        Cursor c=db.getEventsDetail(name1);
+        Cursor c=db.getEventDetail(clicked_date_time);
         if(c.moveToFirst())
         {
             TextView name= (TextView)findViewById(R.id.name_text);
@@ -38,10 +48,22 @@ public class Show_details extends ActionBarActivity {
             stime.setText(c.getString(c.getColumnIndex("start_time")));
 
             TextView etime= (TextView)findViewById(R.id.etime_text);
-            etime.setText(c.getString(c.getColumnIndex("end_time")));
+
+            String str;
+             st=c.getString(c.getColumnIndex("end_time"));
+            if(c.getInt(c.getColumnIndex("next_day"))==1) {
+                str=st.concat("    +1");
+                etime.setText(str);
+            }
+            else
+            {
+                etime.setText(st);
+            }
 
             TextView bluetooth= (TextView)findViewById(R.id.bluetooth_text);
             bluetooth.setText(c.getString(c.getColumnIndex("bluetooth")));
+
+
 
             TextView wifi= (TextView)findViewById(R.id.wifi_text);
             wifi.setText(c.getString(c.getColumnIndex("wifi")));
@@ -51,7 +73,71 @@ public class Show_details extends ActionBarActivity {
 
            TextView mobile_data= (TextView)findViewById(R.id.mobile_data_text);
             mobile_data.setText(c.getString(c.getColumnIndex("mobile_data")));
-            //Toast.makeText(getBaseContext(),"show_details",Toast.LENGTH_SHORT).show();
+
+            String repeat="";
+            int comma=0;
+            TextView repeat_text= (TextView) findViewById(R.id.repeat_text);
+            if(c.getInt(c.getColumnIndex("monday"))==1) {
+                repeat = repeat.concat("Monday");
+                comma = 1;
+            }
+
+            if(c.getInt(c.getColumnIndex("tuesday"))==1) {
+                if(comma==1)
+                {
+                    repeat=repeat.concat(", ");
+                }
+                repeat = repeat.concat("Tuesday");
+                comma=1;
+            }
+
+            if(c.getInt(c.getColumnIndex("wednesday"))==1) {
+                if(comma==1)
+                {
+                    repeat=repeat.concat(", ");
+                }
+                repeat = repeat.concat("Wednesday");
+                comma = 1;
+            }
+
+            if(c.getInt(c.getColumnIndex("thursday"))==1) {
+                if(comma==1)
+                {
+                    repeat=repeat.concat(", ");
+                }
+                repeat = repeat.concat("Thursday");
+                comma = 1;
+            }
+
+            if(c.getInt(c.getColumnIndex("friday"))==1) {
+                if(comma==1)
+                {
+                    repeat=repeat.concat(", ");
+                }
+                repeat = repeat.concat("Friday");
+                comma = 1;
+            }
+
+            if(c.getInt(c.getColumnIndex("saturday"))==1) {
+                if(comma==1)
+                {
+                    repeat=repeat.concat(", ");
+                }
+                repeat = repeat.concat("Saturday");
+                comma = 1;
+            }
+
+            if(c.getInt(c.getColumnIndex("sunday"))==1) {
+                if(comma==1)
+                {
+                    repeat=repeat.concat(", ");
+                }
+
+                repeat = repeat.concat("Sunday");
+            }
+
+                repeat_text.setText(repeat);
+
 
         }
         db.close();
@@ -69,25 +155,4 @@ public class Show_details extends ActionBarActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_show_details, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

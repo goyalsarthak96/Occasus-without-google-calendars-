@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.os.Bundle;
 
-/**
- * Created by Sarthak on 3/26/2015.
- */
+
 public class NotificationView extends Activity{
 
     @Override
